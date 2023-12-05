@@ -6,14 +6,16 @@ class Item implements Item {
     name: string;
     price: number;
     description: string;
+    quantity: number;
    
     
 
-  constructor(name: string, price: number, description: string) {
+  constructor(name: string, price: number, description: string, quantity: number) {
     this.id = uuidv4();
     this.name = name;
     this.price = price;
     this.description = description;
+    this.quantity = quantity;
     
   }
 }
@@ -42,34 +44,29 @@ class User implements User {
   removeItemFromCart(item: Item): void {
     this.cart = this.cart.filter((cartItem) => cartItem.id !== item.id);
   }
-// need some sort of counter....
+  removeCount(item: Item, quantity:number):void{
+      item.quantity -= quantity
+      if (item.quantity <= 0){
+          this.removeItemFromCart(item)
+      }
+      console.log(this.cart)
+  }
+
 }
-const milk = new Item('Milk', 3.99, 'Whole Milk');
-const apples = new Item('Apples', 5.99, '3lbs of Pink Lady Apples');
-const eggs = new Item('Eggs', 7.99, 'Free Range Farm Eggs');
-const bread = new Item('Bread', 4.99, 'Sourdough');
+const milk = new Item('Milk', 3.99, 'Whole Milk',200);
+const apples = new Item('Apples', 5.99, '3lbs of Pink Lady Apples', 1);
+const eggs = new Item('Eggs', 7.99, 'Free Range Farm Eggs', 1);
+const bread = new Item('Bread', 4.99, 'Sourdough', 1);
 
 
 const user1 = new User('Beth Ross', 25);
-const user2 = new User('Jack Black', 55);
+// const user2 = new User('Jack Black', 55);
 
-
-// need to add quantity counter in cell above, then add extra argument to below
 user1.addToCart(milk);
 user1.addToCart(bread);
-// user1.addToCart(apples);
+user1.addToCart(apples)
 user1.addToCart(eggs);
 
 user1.printCart();
-user2.addToCart(milk);
-user2.addToCart(apples);
-user2.addToCart(bread);
 
-user2.printCart();
-
-user1.removeItemFromCart(eggs);
-user1.printCart();
-
-// need a way to have quantity
-// user1.removeQuantityFromCart(eggs);
-// user1.printCart();
+user1.removeCount(milk, 2);
